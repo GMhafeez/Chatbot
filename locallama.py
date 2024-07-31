@@ -1,9 +1,8 @@
-from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
+from langchain_community.llms import Ollama
 import streamlit as st
-
 import os
  
 from dotenv import load_dotenv
@@ -18,8 +17,6 @@ if api_key_1:
 else:
     print("Warning: OPENAI_API_KEY not found in environment variables.")
 
-# os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-
 ## LangSmith tracking
 os.environ["LANGCHAIN_TRACKING_V2"] = "true"
 
@@ -27,12 +24,7 @@ if api_key_2:
     os.environ["OPENAI_API_KEY"] = api_key_1
     print("API key loaded successfully.")
 else:
-    print("Warning: OPENAI_API_KEY not found in environment variables.")
-
-# os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
-
-
-##Prompt Template
+    print("Warning: OPENAI_API_KEY not found in environment variables.")    
 
 prompt = ChatPromptTemplate.from_messages(
     [
@@ -40,15 +32,12 @@ prompt = ChatPromptTemplate.from_messages(
         ("user", "Question: {question}")
     ]
 )
-
 ## stream lit 
-st.title("langchain demo with openAI_Api")
+st.title("langchain demo with Gemma")
 input_text = st.text_input("Search the topic u want")
-
-
-# Open AI  llm
-
-llm = ChatOpenAI (model = "gpt-3.5-turbo")
+ 
+# Ollama  llm 
+llm = Ollama (model = "gemma")
 
 output_parser = StrOutputParser()
 chain = prompt|llm|output_parser
